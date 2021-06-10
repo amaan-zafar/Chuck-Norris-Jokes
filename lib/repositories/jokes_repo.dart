@@ -8,18 +8,19 @@ abstract class JokesRepository {
 }
 
 class ChuckJokesRepository implements JokesRepository {
-  ApiProvider _apiProvider = ApiProvider();
+  final ApiProvider apiProvider;
+
+  ChuckJokesRepository({required this.apiProvider});
 
   @override
   Future<JokesCategories> fetchCategories() async {
-    final response = await _apiProvider.get('jokes/categories');
+    final response = await apiProvider.get('jokes/categories');
     return JokesCategories.fromJson(response);
   }
 
   @override
   Future<JokeResponse> fetchJokeResponseData(String category) async {
-    final response =
-        await _apiProvider.get('jokes/random?category=' + category);
+    final response = await apiProvider.get('jokes/random?category=' + category);
     return JokeResponse.fromJson(response);
   }
 }

@@ -6,12 +6,15 @@ import 'dart:async';
 import 'package:jokes/network/api_exceptions.dart';
 
 class ApiProvider {
-  final String _baseUrl = "https://api.chucknorris.io/";
+  static const String _baseUrl = "https://api.chucknorris.io/";
+  final http.Client httpClient;
+
+  ApiProvider({required this.httpClient});
 
   Future<dynamic> get(String url) async {
     var responseJson;
     try {
-      final response = await http.get(Uri.http(_baseUrl, url));
+      final response = await this.httpClient.get(Uri.http(_baseUrl, url));
       responseJson = _response(response);
     } on SocketException {
       throw FetchDataException('No Internet connection');
