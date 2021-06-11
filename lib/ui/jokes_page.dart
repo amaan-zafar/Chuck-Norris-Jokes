@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jokes/blocs/joke_response_bloc/joke_response_bloc.dart';
 import 'package:jokes/models/joke_response.dart';
+import 'package:jokes/ui/widgets/loading.dart';
+import 'package:jokes/ui/widgets/error.dart';
 
 class ShowChuckyJoke extends StatefulWidget {
   final String selectedCategory;
@@ -21,7 +25,19 @@ class _ShowChuckyJokeState extends State<ShowChuckyJoke> {
           backgroundColor: Color(0xFF333333),
         ),
         backgroundColor: Color(0xFF333333),
-        body: Container()
+        body: BlocBuilder<JokeResponseBloc, JokeResponseState>(
+          builder: (context, state) {
+            if (state is JokeResponseLoading)
+              return Loading(loadingMessage: state.message);
+            else if (state is JokeResponseLoaded)
+              return ChuckJoke(displayJoke: state.jokeResponse);
+            else if (state is JokeResponseError)
+              return Error(
+                errorMessage: state.message,
+              );
+            return Container();
+          },
+        )
         // RefreshIndicator(
         //   onRefresh: () => _bloc.fetchChuckyJoke(widget.selectedCategory),
         //   child: StreamBuilder<JokesStates<JokeResponse>>(
