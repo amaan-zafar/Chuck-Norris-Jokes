@@ -86,6 +86,8 @@ class CategoryList extends StatelessWidget {
               ),
               child: InkWell(
                   onTap: () {
+                    print(
+                        'category selected is ${categoryList.categories[index]}');
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) =>
                             ShowChuckyJoke(categoryList.categories[index])));

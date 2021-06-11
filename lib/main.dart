@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jokes/blocs/joke_response_bloc/joke_response_bloc.dart';
 import 'package:jokes/network/api_base_helper.dart';
 import 'package:jokes/repositories/jokes_repo.dart';
 import 'package:jokes/ui/jokes_categories_page.dart';
@@ -29,12 +30,14 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => CategoriesBloc(jokesRepository: jokesRepository),
         ),
-        // BlocProvider(
-        //   create: (context) => SubjectBloc(),
-        // ),
+        BlocProvider(
+          create: (context) =>
+              JokeResponseBloc(jokesRepository: jokesRepository),
+        ),
       ],
       child: MaterialApp(
         title: 'Chuck Jokes',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(primarySwatch: Colors.blue),
         home: CategoriesPage(),
       ),

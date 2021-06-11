@@ -17,6 +17,8 @@ class ShowChuckyJoke extends StatefulWidget {
 class _ShowChuckyJokeState extends State<ShowChuckyJoke> {
   @override
   Widget build(BuildContext context) {
+    final categoriesBloc = BlocProvider.of<JokeResponseBloc>(context);
+    categoriesBloc.add(GetJokeResponse(category: widget.selectedCategory));
     return Scaffold(
         appBar: AppBar(
           elevation: 0.0,
@@ -81,7 +83,7 @@ class ChuckJoke extends StatelessWidget {
         color: new Color(0xFF736AB7),
         child: new Stack(
           children: <Widget>[
-            _getBackground(),
+            // _getBackground(),
             _getGradient(context),
             _getContent(),
           ],

@@ -17,7 +17,7 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
     CategoriesEvent event,
   ) async* {
     if (event is GetCategories) {
-      yield CategoriesLoading(message: 'Fetching data');
+      yield CategoriesLoading(message: 'Fetching Jokes Categories');
       try {
         final JokesCategories categoriesList =
             await jokesRepository.fetchCategories();
