@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jokes/blocs/bloc/categories_bloc.dart';
+import 'package:jokes/blocs/categories_bloc/categories_bloc.dart';
 import 'package:jokes/models/jokes_categories.dart';
 import 'package:jokes/ui/widgets/loading.dart';
 import 'package:jokes/ui/widgets/error.dart';

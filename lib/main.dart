@@ -5,8 +5,8 @@ import 'package:jokes/repositories/jokes_repo.dart';
 import 'package:jokes/ui/jokes_categories_page.dart';
 import 'package:http/http.dart' as http;
 
-import 'blocs/bloc/categories_bloc.dart';
 import 'blocs/blocs_observer.dart';
+import 'blocs/categories_bloc/categories_bloc.dart';
 
 void main() {
   Bloc.observer = SimpleBlocObserver();
