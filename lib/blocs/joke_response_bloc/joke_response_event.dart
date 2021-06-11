@@ -10,7 +10,17 @@ abstract class JokeResponseEvent extends Equatable {
 class GetJokeResponse extends JokeResponseEvent {
   final String category;
 
-  GetJokeResponse({required this.category});
+  const GetJokeResponse({required this.category});
+
+  @override
+  List<Object> get props => [category];
+}
+
+class JokeRefreshRequested extends JokeResponseEvent {
+  final String category;
+
+  const JokeRefreshRequested({required this.category});
+
   @override
   List<Object> get props => [category];
 }

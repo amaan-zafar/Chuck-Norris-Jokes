@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jokes/blocs/categories_bloc/categories_bloc.dart';
@@ -14,6 +16,14 @@ class CategoriesPage extends StatefulWidget {
 }
 
 class _GetChuckyState extends State<CategoriesPage> {
+  late Completer<void> _refreshCompleter;
+
+  @override
+  void initState() {
+    _refreshCompleter = Completer<void>();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final categoriesBloc = BlocProvider.of<CategoriesBloc>(context);
@@ -28,17 +38,33 @@ class _GetChuckyState extends State<CategoriesPage> {
           backgroundColor: Color(0xFF333333),
         ),
         backgroundColor: Color(0xFF333333),
-        body: BlocBuilder<CategoriesBloc, CategoriesState>(
+        body: BlocConsumer<CategoriesBloc, CategoriesState>(
+          listener: (context, state) {
+            if (state is CategoriesLoaded) {
+              _refreshCompleter.complete();
+              _refreshCompleter = Completer();
+            }
+          },
           builder: (context, state) {
-            if (state is CategoriesLoading)
-              return Loading(loadingMessage: state.message);
-            else if (state is CategoriesLoaded)
-              return CategoryList(categoryList: state.categoriesList);
-            else if (state is CategoriesError)
-              return Error(
-                errorMessage: state.message,
-              );
-            return Container();
+            return RefreshIndicator(
+              onRefresh: () {
+                categoriesBloc.add(CategoriesRefreshRequested());
+                return _refreshCompleter.future;
+              },
+              child: BlocBuilder<CategoriesBloc, CategoriesState>(
+                builder: (context, state) {
+                  if (state is CategoriesLoading)
+                    return Loading(loadingMessage: state.message);
+                  else if (state is CategoriesLoaded)
+                    return CategoryList(categoryList: state.categoriesList);
+                  else if (state is CategoriesError)
+                    return Error(
+                      errorMessage: state.message,
+                    );
+                  return Container();
+                },
+              ),
+            );
           },
         )
         // RefreshIndicator(
