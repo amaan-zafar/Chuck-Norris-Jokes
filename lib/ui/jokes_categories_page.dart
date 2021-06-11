@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jokes/blocs/bloc/categories_bloc.dart';
 import 'package:jokes/models/jokes_categories.dart';
+import 'package:jokes/ui/widgets/loading.dart';
+import 'package:jokes/ui/widgets/error.dart';
 
 import 'jokes_page.dart';
 
@@ -11,6 +15,8 @@ class CategoriesPage extends StatefulWidget {
 class _GetChuckyState extends State<CategoriesPage> {
   @override
   Widget build(BuildContext context) {
+    final categoriesBloc = BlocProvider.of<CategoriesBloc>(context);
+    categoriesBloc.add(GetCategories());
     return Scaffold(
         appBar: AppBar(
           elevation: 0.0,
@@ -20,7 +26,19 @@ class _GetChuckyState extends State<CategoriesPage> {
           backgroundColor: Color(0xFF333333),
         ),
         backgroundColor: Color(0xFF333333),
-        body: Container()
+        body: BlocBuilder<CategoriesBloc, CategoriesState>(
+          builder: (context, state) {
+            if (state is CategoriesLoading)
+              return Loading(loadingMessage: state.message);
+            else if (state is CategoriesLoaded)
+              return CategoryList(categoryList: state.categoriesList);
+            else if (state is CategoriesError)
+              return Error(
+                errorMessage: state.message,
+              );
+            return Container();
+          },
+        )
         // RefreshIndicator(
         //   onRefresh: () => _bloc.fetchCategories(),
         //   child: StreamBuilder<Response<chuckCategories>>(

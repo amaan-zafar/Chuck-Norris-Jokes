@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jokes/blocs/bloc/categories_bloc.dart';
-import 'package:jokes/blocs/blocs_observer.dart';
 import 'package:jokes/network/api_base_helper.dart';
 import 'package:jokes/repositories/jokes_repo.dart';
+import 'package:jokes/ui/jokes_categories_page.dart';
 import 'package:http/http.dart' as http;
+
+import 'blocs/bloc/categories_bloc.dart';
+import 'blocs/blocs_observer.dart';
 
 void main() {
   Bloc.observer = SimpleBlocObserver();
@@ -31,7 +33,11 @@ class MyApp extends StatelessWidget {
         //   create: (context) => SubjectBloc(),
         // ),
       ],
-      child: Container(),
+      child: MaterialApp(
+        title: 'Chuck Jokes',
+        theme: ThemeData(primarySwatch: Colors.blue),
+        home: CategoriesPage(),
+      ),
     );
   }
 }

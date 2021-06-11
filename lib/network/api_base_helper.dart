@@ -12,13 +12,19 @@ class ApiProvider {
   ApiProvider({required this.httpClient});
 
   Future<dynamic> get(String url) async {
+    var uri = Uri.parse(_baseUrl + url);
+    print('Uri is $uri');
     var responseJson;
     try {
-      final response = await this.httpClient.get(Uri.http(_baseUrl, url));
+      final response = await httpClient.get(uri);
+      print('fetched res is $response');
       responseJson = _response(response);
     } on SocketException {
       throw FetchDataException('No Internet connection');
+    } on FormatException {
+      throw FetchDataException('Format Exception');
     }
+    print('res is $responseJson');
     return responseJson;
   }
 

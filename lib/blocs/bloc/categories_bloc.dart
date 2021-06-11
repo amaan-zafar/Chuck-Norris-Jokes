@@ -23,6 +23,7 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
             await jokesRepository.fetchCategories();
         yield CategoriesLoaded(categoriesList: categoriesList);
       } catch (e) {
+        print('Error caught : ${e.toString()}');
         yield CategoriesError(message: 'Error: ${e.toString()}');
       }
     }
