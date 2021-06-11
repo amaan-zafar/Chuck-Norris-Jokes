@@ -4,6 +4,7 @@ import 'package:jokes/blocs/categories_bloc/categories_bloc.dart';
 import 'package:jokes/models/jokes_categories.dart';
 import 'package:jokes/ui/widgets/loading.dart';
 import 'package:jokes/ui/widgets/error.dart';
+import 'package:jokes/utils/extensions.dart';
 
 import 'jokes_page.dart';
 
@@ -21,8 +22,9 @@ class _GetChuckyState extends State<CategoriesPage> {
         appBar: AppBar(
           elevation: 0.0,
           automaticallyImplyLeading: false,
-          title: Text('Chucky Categories',
+          title: Text('Jokes Categories',
               style: TextStyle(color: Colors.white, fontSize: 20)),
+          centerTitle: true,
           backgroundColor: Color(0xFF333333),
         ),
         backgroundColor: Color(0xFF333333),
@@ -100,7 +102,7 @@ class CategoryList extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsets.fromLTRB(4, 0, 0, 0),
                         child: Text(
-                          categoryList.categories[index],
+                          categoryList.categories[index].capitalize(),
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 20,

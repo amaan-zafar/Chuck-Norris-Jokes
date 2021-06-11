@@ -22,8 +22,9 @@ class _ShowChuckyJokeState extends State<ShowChuckyJoke> {
     return Scaffold(
         appBar: AppBar(
           elevation: 0.0,
-          title: Text('Chucky Joke',
-              style: TextStyle(color: Colors.white, fontSize: 20)),
+          title:
+              Text('Joke', style: TextStyle(color: Colors.white, fontSize: 20)),
+          centerTitle: true,
           backgroundColor: Color(0xFF333333),
         ),
         backgroundColor: Color(0xFF333333),
@@ -92,19 +93,19 @@ class ChuckJoke extends StatelessWidget {
     );
   }
 
-  Container _getBackground() {
-    return new Container(
-      child: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/images/chuck.png"),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: null /* add child content here */,
-      ),
-    );
-  }
+  // Container _getBackground() {
+  //   return new Container(
+  //     child: Container(
+  //       decoration: BoxDecoration(
+  //         image: DecorationImage(
+  //           image: AssetImage("assets/images/chuck.png"),
+  //           fit: BoxFit.cover,
+  //         ),
+  //       ),
+  //       child: null /* add child content here */,
+  //     ),
+  //   );
+  // }
 
   Container _getGradient(BuildContext context) {
     return new Container(
