@@ -28,6 +28,12 @@ class JokeResponseBloc extends Bloc<JokeResponseEvent, JokeResponseState> {
         yield JokeResponseError(
             message: 'Error caught in JokeResponseBloc is ${e.toString()}');
       }
+    } else if (event is JokeRefreshRequested) {
+      try {
+        final JokeResponse response =
+            await jokesRepository.fetchJokeResponseData(event.category);
+        yield JokeResponseLoaded(jokeResponse: response);
+      } catch (_) {}
     }
   }
 }

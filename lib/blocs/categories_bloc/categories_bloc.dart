@@ -25,8 +25,7 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
       } catch (e) {
         yield CategoriesError(message: 'Error: ${e.toString()}');
       }
-    }
-    if (event is CategoriesRefreshRequested) {
+    } else if (event is CategoriesRefreshRequested) {
       try {
         final JokesCategories categoriesList =
             await jokesRepository.fetchCategories();

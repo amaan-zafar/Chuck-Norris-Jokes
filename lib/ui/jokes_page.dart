@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jokes/blocs/joke_response_bloc/joke_response_bloc.dart';
@@ -15,10 +17,18 @@ class ShowChuckyJoke extends StatefulWidget {
 }
 
 class _ShowChuckyJokeState extends State<ShowChuckyJoke> {
+  late Completer<void> _refreshCompleter;
+
+  @override
+  void initState() {
+    _refreshCompleter = Completer<void>();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final categoriesBloc = BlocProvider.of<JokeResponseBloc>(context);
-    categoriesBloc.add(GetJokeResponse(category: widget.selectedCategory));
+    final jokeResponseBloc = BlocProvider.of<JokeResponseBloc>(context);
+    jokeResponseBloc.add(GetJokeResponse(category: widget.selectedCategory));
     return Scaffold(
         appBar: AppBar(
           elevation: 0.0,
@@ -28,17 +38,34 @@ class _ShowChuckyJokeState extends State<ShowChuckyJoke> {
           backgroundColor: Color(0xFF333333),
         ),
         backgroundColor: Color(0xFF333333),
-        body: BlocBuilder<JokeResponseBloc, JokeResponseState>(
+        body: BlocConsumer<JokeResponseBloc, JokeResponseState>(
+          listener: (context, state) {
+            if (state is JokeResponseLoaded) {
+              _refreshCompleter.complete();
+              _refreshCompleter = Completer();
+            }
+          },
           builder: (context, state) {
-            if (state is JokeResponseLoading)
-              return Loading(loadingMessage: state.message);
-            else if (state is JokeResponseLoaded)
-              return ChuckJoke(displayJoke: state.jokeResponse);
-            else if (state is JokeResponseError)
-              return Error(
-                errorMessage: state.message,
-              );
-            return Container();
+            return RefreshIndicator(
+              onRefresh: () {
+                jokeResponseBloc.add(
+                    JokeRefreshRequested(category: widget.selectedCategory));
+                return _refreshCompleter.future;
+              },
+              child: BlocBuilder<JokeResponseBloc, JokeResponseState>(
+                builder: (context, state) {
+                  if (state is JokeResponseLoading)
+                    return Loading(loadingMessage: state.message);
+                  else if (state is JokeResponseLoaded)
+                    return ChuckJoke(displayJoke: state.jokeResponse);
+                  else if (state is JokeResponseError)
+                    return Error(
+                      errorMessage: state.message,
+                    );
+                  return Container();
+                },
+              ),
+            );
           },
         )
         // RefreshIndicator(
@@ -84,7 +111,7 @@ class ChuckJoke extends StatelessWidget {
         color: new Color(0xFF736AB7),
         child: new Stack(
           children: <Widget>[
-            // _getBackground(),
+            _getBackground(),
             _getGradient(context),
             _getContent(),
           ],
@@ -93,19 +120,19 @@ class ChuckJoke extends StatelessWidget {
     );
   }
 
-  // Container _getBackground() {
-  //   return new Container(
-  //     child: Container(
-  //       decoration: BoxDecoration(
-  //         image: DecorationImage(
-  //           image: AssetImage("assets/images/chuck.png"),
-  //           fit: BoxFit.cover,
-  //         ),
-  //       ),
-  //       child: null /* add child content here */,
-  //     ),
-  //   );
-  // }
+  Container _getBackground() {
+    return new Container(
+      child: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/chuck.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: null /* add child content here */,
+      ),
+    );
+  }
 
   Container _getGradient(BuildContext context) {
     return new Container(
